@@ -12,9 +12,9 @@ from w2.utils.database import DB
 app = FastAPI()
 manager = ConnectionManager()
 
-# start an asynchronous task that will keep broadcasting the process status to all the connected clients
-broadcast_continuous = Thread(target=asyncio.run, args=(manager.broadcast_all(),))
-broadcast_continuous.start()
+# # start an asynchronous task that will keep broadcasting the process status to all the connected clients
+# broadcast_continuous = Thread(target=asyncio.run, args=(manager.broadcast_all(),))
+# broadcast_continuous.start()
 
 
 # The below endpoint is used to create websocket connection
@@ -42,7 +42,7 @@ async def get() -> Dict:
     """
 
     ######################################## YOUR CODE HERE ##################################################
-
+    return {"status": "ok"}
     ######################################## YOUR CODE HERE ##################################################
 
 
@@ -53,7 +53,8 @@ async def get() -> HTMLResponse:
     should render the HTML file - index.html when a user goes to http://127.0.0.1:8000/
     """
     ######################################## YOUR CODE HERE ##################################################
-
+    ##blatantly copying from the lecture notes here :)
+    return "Hello"    
     ######################################## YOUR CODE HERE ##################################################
 
 
@@ -64,5 +65,11 @@ async def get() -> List[ProcessStatus]:
     Get all the records from the process table and return it using the pydantic model ProcessStatus
     """
     ######################################## YOUR CODE HERE ##################################################
-
+    data = DB.read_all()
+    #Using list comprehension to obtain a list of instances
+    return [ProcessStatus(**process) for process in data]
     ######################################## YOUR CODE HERE ##################################################
+
+if __name__ == "__main__":
+    broadcast_continuous = Thread(target=asyncio.run, args=(manager.broadcast_all(),))
+    broadcast_continuous.start()
