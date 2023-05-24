@@ -12,9 +12,9 @@ from w2.utils.database import DB
 app = FastAPI()
 manager = ConnectionManager()
 
-# # start an asynchronous task that will keep broadcasting the process status to all the connected clients
-# broadcast_continuous = Thread(target=asyncio.run, args=(manager.broadcast_all(),))
-# broadcast_continuous.start()
+# start an asynchronous task that will keep broadcasting the process status to all the connected clients
+broadcast_continuous = Thread(target=asyncio.run, args=(manager.broadcast_all(),))
+broadcast_continuous.start()
 
 
 # The below endpoint is used to create websocket connection
@@ -53,8 +53,14 @@ async def get() -> HTMLResponse:
     should render the HTML file - index.html when a user goes to http://127.0.0.1:8000/
     """
     ######################################## YOUR CODE HERE ##################################################
-    ##blatantly copying from the lecture notes here :)
-    return "Hello"    
+    
+    # read the file
+    # return its content
+
+    with open("index.html") as f:
+        html = f.read()
+    
+    return HTMLResponse(content=html, status_code=200)
     ######################################## YOUR CODE HERE ##################################################
 
 
@@ -65,11 +71,11 @@ async def get() -> List[ProcessStatus]:
     Get all the records from the process table and return it using the pydantic model ProcessStatus
     """
     ######################################## YOUR CODE HERE ##################################################
-    data = DB.read_all()
-    #Using list comprehension to obtain a list of instances
-    return [ProcessStatus(**process) for process in data]
-    ######################################## YOUR CODE HERE ##################################################
+    # read all records from the table
+    # return them as ProcessStatus model
 
-if __name__ == "__main__":
-    broadcast_continuous = Thread(target=asyncio.run, args=(manager.broadcast_all(),))
-    broadcast_continuous.start()
+    db = DB()
+    processes = db.read_all()
+
+    return [ProcessStatus(**process) for process in processes]
+    ######################################## YOUR CODE HERE ##################################################
