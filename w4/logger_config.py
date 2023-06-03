@@ -4,7 +4,6 @@ from global_utils import make_dir
 
 CURRENT_FOLDER_NAME = os.path.dirname(os.path.abspath(__file__))
 
-
 class Logger:
     def __init__(self, log_file_name: str, module_name: str):
         """
@@ -18,37 +17,36 @@ class Logger:
         self.f_handler = logging.FileHandler(os.path.join(CURRENT_FOLDER_NAME, 'logs', log_file_name))
 
         # Create formatters and add it to handlers
-        ######################################## YOUR CODE HERE ##################################################
-        # set the logging formatter to the f_handler
-        ######################################## YOUR CODE HERE ##################################################
+        log_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        self.f_handler.setFormatter(log_formatter)
 
-        ######################################## YOUR CODE HERE ##################################################
-        # Add handlers to the logger and setlevel to DEBUG
-        ######################################## YOUR CODE HERE ##################################################
+        # Add handlers to the logger and set level to DEBUG
+        self.logger.addHandler(self.f_handler)
+        self.logger.setLevel(logging.DEBUG)
 
     def warning(self, msg):
-        pass
-        ######################################## YOUR CODE HERE ##################################################
-        ######################################## YOUR CODE HERE ##################################################
+        self.logger.warning(msg)
 
     def error(self, msg):
-        pass
-        ######################################## YOUR CODE HERE ##################################################
-        ######################################## YOUR CODE HERE ##################################################
+        self.logger.error(msg)
 
     def info(self, msg):
-        pass
-        ######################################## YOUR CODE HERE ##################################################
-        ######################################## YOUR CODE HERE ##################################################
+        self.logger.info(msg)
 
     def debug(self, msg):
-        pass
-        ######################################## YOUR CODE HERE ##################################################
-        ######################################## YOUR CODE HERE ##################################################
+        self.logger.debug(msg)
 
-
+# Create server_logger for server logs
 server_logger = Logger(log_file_name='server_logs.txt', module_name='server_logs')
+
+# Create main_logger for data processing tasks
 main_logger = Logger(log_file_name='main_logs.txt', module_name='main_logs')
 
+# Reference the server_logger and main_logger instances wherever needed in the codebase
+# For example, you can use server_logger to log server-related events
+server_logger.info('Server started')
+server_logger.debug('Received request from client')
 
-
+# And you can use main_logger to log data processing tasks
+main_logger.info('Processing data')
+main_logger.error('Error occurred during data processing')
